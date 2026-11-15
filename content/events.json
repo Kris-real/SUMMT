@@ -1,0 +1,122 @@
+{
+ "events": [
+  {
+   "type": "conference",
+   "cat": "Virtual",
+   "title": "Virtual Conference: Diabetes, Its Complications and Management",
+   "date": "2022-11-29",
+   "when": "November 2022",
+   "format": "Online",
+   "venue": "Online",
+   "status": "Completed",
+   "desc": "An online academic program held in November 2022, with six talks on diabetes and its complications.",
+   "more": "The talks covered gestational diabetes, the diabetic foot, respiratory infections, cardiac issues, a clinical perspective on Gen 2.0 basal insulin therapy, and painful diabetic neuropathy. Speakers included Dr Vartika Srivastava, Dr Badri Vishal, Dr Chandrashekhar, Dr Anup Banerjee, Dr Brijendra Kumar Srivastava, and Dr Bimal Nautiyal."
+  },
+  {
+   "type": "conference",
+   "cat": "In Person",
+   "title": "Metabolic Management Meet (MMM)",
+   "date": "2026-01-01",
+   "when": "2026",
+   "format": "In Person",
+   "venue": "Uttar Pradesh",
+   "status": "Completed",
+   "desc": "An in-person academic meeting on metabolic management, held in Uttar Pradesh.",
+   "more": "Over 200 physicians, diabetologists, endocrinologists and gynecologists attended this Metabolic Management Meet to gain the latest insights into metabolic medicine and diabetes.",
+   "reel": [
+    {
+     "img": "/images/m1.jpg",
+     "alt": "A speaker presenting on stage under the Metabolic Management Meet banner, with delegates seated in a hall"
+    },
+    {
+     "img": "/images/m2.jpg",
+     "alt": "A speaker being presented with a framed silver memento on stage, with two senior faculty members beside her"
+    },
+    {
+     "img": "/images/m3.jpg",
+     "alt": "Delegates seated at round tables in a hall as a speaker presents on a large screen"
+    },
+    {
+     "img": "/images/m4.jpg",
+     "alt": "A packed hall of delegates listening to a speaker at the Metabolic Management Meet"
+    },
+    {
+     "img": "/images/m5.jpg",
+     "alt": "A woman speaking at the MMM'26 podium with a slide on bone health on the screen behind her"
+    },
+    {
+     "img": "/images/m6.jpg",
+     "alt": "Seven women and a man on stage presenting a memento at the Metabolic Management Meet"
+    },
+    {
+     "img": "/images/m7.jpg",
+     "alt": "A woman speaking from the lectern to a seated audience, with guests on white sofas"
+    },
+    {
+     "img": "/images/m8.jpg",
+     "alt": "A speaker presenting at the MMM'26 podium with a slide on thyroid targets before pregnancy"
+    },
+    {
+     "img": "/images/m9.jpg",
+     "alt": "A senior faculty member speaking at the MMM'26 podium"
+    },
+    {
+     "img": "/images/m10.jpg",
+     "alt": "A speaker walking across the stage in front of a slide on obesity-related complications"
+    },
+    {
+     "img": "/images/m11.jpg",
+     "alt": "Five senior doctors standing together in the foyer in front of the faculty board"
+    },
+    {
+     "img": "/images/m12.jpg",
+     "alt": "Delegates collecting badges and lanyards at the registration desk"
+    }
+   ]
+  },
+  {
+   "type": "conference",
+   "cat": "Virtual",
+   "title": "Virtual Conference: Cardio-Renal-Metabolic Care in Type 2 Diabetes",
+   "date": "2023-12-01",
+   "when": "December 2023",
+   "format": "Online",
+   "venue": "Online",
+   "status": "Completed",
+   "desc": "An online conference on type 2 diabetes and cardio-renal-metabolic care. It was held online because of COVID restrictions.",
+   "more": "A day-long program of four seminars and two panel discussions. Topics included moving from diabetic care to metabolic care, the role of DPP-4 inhibitors in individual patients, holistic cardio-renal-metabolic care in type 2 diabetes, technology for starting insulin, glycaemic variability, and the use of DPP-4 inhibitors with basal insulin."
+  },
+  {
+   "type": "camp",
+   "cat": "Rural",
+   "title": "Rural Medical Camp: Detection of Diabetes, Its Complications and Management",
+   "date": "2022-12-01",
+   "when": "December 2022",
+   "format": "In Person",
+   "venue": "District Sitapur, Uttar Pradesh",
+   "status": "Completed",
+   "desc": "A medical camp for people living in rural areas.",
+   "more": "The camp aimed to detect diabetes and its complications and teach management in rural communities where diabetes is rising quickly. People were screened and taught how to manage diabetes and look after themselves. Checks included foot examination, haemoglobin for anaemia, ECG, eye examination and HbA1c, alongside blood sugar and blood pressure. Diabetologists spoke on diabetic neuropathy, nephropathy, retinopathy, and heart and foot disease."
+  },
+  {
+   "type": "camp",
+   "cat": "Diabetes",
+   "title": "Diabetes Awareness Camp",
+   "date": "2021-12-07",
+   "when": "7 December 2021",
+   "format": "In Person",
+   "venue": "District Sitapur, Uttar Pradesh",
+   "status": "Completed",
+   "desc": "A free medical camp on diabetes and its complications was held for people in need in District Sitapur, Uttar Pradesh.",
+   "more": "All services and investigations were free. Lectures educated visitors on diabetes, its complications and management, and on ways to prevent diabetes. About 500 people were expected to benefit.",
+   "list": [
+    "Height, weight and BMI",
+    "Blood sugar and blood pressure",
+    "Foot examination for nerve damage (biothesiometry)",
+    "ECG, for heart patients",
+    "Peripheral Doppler, to look at the blood supply of the foot",
+    "HbA1c, for high-risk groups"
+   ]
+  }
+ ]
+}

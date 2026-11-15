@@ -1,0 +1,163 @@
+# Admin panel settings for the SUMMET website (Decap CMS).
+# STEP: replace YOUR-GITHUB-USERNAME/YOUR-REPO-NAME below (see the setup guide).
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME
+  branch: main
+  # VERCEL LOGIN: put your live address here (no slash at the end), for example https://summet.vercel.app
+  base_url: https://YOUR-SITE.vercel.app
+  auth_endpoint: api/auth
+
+publish_mode: simple
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+locale: "en"
+site_url: ""
+
+collections:
+  - name: "pages"
+    label: "Website content"
+    files:
+
+      - name: "site"
+        label: "Home page and site details"
+        file: "content/site.json"
+        fields:
+          - { label: "Trust name", name: "name", widget: "string" }
+          - { label: "Place", name: "city", widget: "string" }
+          - { label: "Contact email", name: "email", widget: "string", hint: "Shown on the Contact page." }
+          - { label: "Tagline", name: "tagline", widget: "string", hint: "Shown in the footer and the browser tab." }
+          - { label: "Footer: established line", name: "est", widget: "string", required: false }
+          - { label: "Footer: draft notice", name: "draftNote", widget: "string", required: false, hint: "Leave empty to hide the 'Website draft' line. Do this before you go live." }
+          - label: "Home page"
+            name: "home"
+            widget: "object"
+            fields:
+              - { label: "Small label above the heading", name: "motto", widget: "string", required: false }
+              - { label: "Line under the label", name: "mottoNote", widget: "string", required: false }
+              - { label: "Main heading (one line per row)", name: "title", widget: "text" }
+              - { label: "Small meaning text under the heading", name: "meaning", widget: "text", required: false }
+              - { label: "Top picture", name: "heroImg", widget: "image" }
+              - { label: "Sentence under the heading", name: "stmt", widget: "text" }
+              - { label: "Slideshow heading", name: "reelTitle", widget: "string" }
+              - { label: "Slideshow text", name: "reelText", widget: "string", required: false }
+              - label: "Our story paragraphs"
+                name: "story"
+                widget: "list"
+                field: { label: "Paragraph", name: "text", widget: "text" }
+              - { label: "Events section heading", name: "eventsTitle", widget: "string" }
+              - { label: "Events section note", name: "eventsNote", widget: "string", required: false }
+
+      - name: "events"
+        label: "Events (conferences and camps)"
+        file: "content/events.json"
+        fields:
+          - label: "Events"
+            name: "events"
+            widget: "list"
+            label_singular: "event"
+            summary: "{{fields.when}} - {{fields.title}}"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - label: "Type"
+                name: "type"
+                widget: "select"
+                options: [{ label: "Conference", value: "conference" }, { label: "Camp", value: "camp" }]
+              - { label: "Date (used for sorting)", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", picker_utc: true }
+              - { label: "Date as shown on the site", name: "when", widget: "string", hint: "For example: 7 December 2021, or November 2022." }
+              - label: "Status"
+                name: "status"
+                widget: "select"
+                options: ["Completed", "Upcoming"]
+                default: "Completed"
+              - label: "Format"
+                name: "format"
+                widget: "select"
+                options: ["In Person", "Online"]
+              - { label: "Venue", name: "venue", widget: "string", required: false, hint: "Leave empty if not known; the site shows 'To be added'." }
+              - { label: "Category (used by the filter)", name: "cat", widget: "string", required: false, hint: "For example: Virtual, In person, Rural, Diabetes." }
+              - { label: "Short description", name: "desc", widget: "text" }
+              - { label: "More detail", name: "more", widget: "text", required: false }
+              - label: "Checklist (one line each)"
+                name: "list"
+                widget: "list"
+                required: false
+                field: { label: "Line", name: "text", widget: "string" }
+              - label: "Photos for this event"
+                name: "reel"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Photo", name: "img", widget: "image" }
+                  - { label: "Description of the photo (for screen readers)", name: "alt", widget: "string" }
+
+      - name: "photos"
+        label: "Homepage photo slideshow"
+        file: "content/photos.json"
+        fields:
+          - label: "Photos"
+            name: "photos"
+            widget: "list"
+            label_singular: "photo"
+            summary: "{{fields.alt}}"
+            fields:
+              - { label: "Photo", name: "img", widget: "image", hint: "Use photos under 1 MB so the site stays fast." }
+              - { label: "Description of the photo (for screen readers)", name: "alt", widget: "string" }
+
+      - name: "story"
+        label: "Our story chapters"
+        file: "content/story.json"
+        fields:
+          - label: "Chapters"
+            name: "chapters"
+            widget: "list"
+            label_singular: "chapter"
+            summary: "{{fields.t}}"
+            fields:
+              - { label: "Chapter title", name: "t", widget: "string" }
+              - { label: "Picture", name: "img", widget: "image", required: false }
+              - { label: "Picture description (for screen readers)", name: "alt", widget: "string", required: false }
+              - { label: "Picture caption", name: "cap", widget: "string", required: false }
+              - { label: "Picture width in pixels", name: "mw", widget: "number", required: false, hint: "Usually 340 to 460." }
+              - label: "Paragraphs"
+                name: "p"
+                widget: "list"
+                field: { label: "Paragraph", name: "text", widget: "text", hint: "To link to the About page, write: Read more <a href=\"#/about/umakant\">about Sri Umakant</a>." }
+
+      - name: "about"
+        label: "About page"
+        file: "content/about.json"
+        fields:
+          - { label: "Opening line", name: "lead", widget: "text" }
+          - label: "Paragraphs about the trust"
+            name: "paras"
+            widget: "list"
+            field: { label: "Paragraph", name: "text", widget: "text" }
+          - { label: "About Sri Umakant: opening line", name: "umLead", widget: "text" }
+          - label: "About Sri Umakant: paragraphs"
+            name: "umParas"
+            widget: "list"
+            field: { label: "Paragraph", name: "text", widget: "text" }
+          - label: "Family archive photos"
+            name: "archive"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Photo", name: "img", widget: "image" }
+              - { label: "Description (for screen readers)", name: "alt", widget: "string" }
+              - { label: "Caption", name: "cap", widget: "string" }
+          - label: "Milestones"
+            name: "milestones"
+            widget: "list"
+            required: false
+            fields:
+              - { label: "Year", name: "year", widget: "string" }
+              - { label: "What happened", name: "text", widget: "text" }
+          - { label: "Closing line", name: "closing", widget: "text", required: false }
+          - { label: "Mission sentence", name: "mission", widget: "text" }
+          - label: "Objectives"
+            name: "objectives"
+            widget: "list"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }

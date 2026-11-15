@@ -1,0 +1,24 @@
+{
+  "name": "Sri Umakant Memorial Medical & Educational Trust",
+  "city": "Sitapur, Uttar Pradesh",
+  "email": "summtindia@gmail.com",
+  "tagline": "Committed to building a healthier society with compassion and empathy",
+  "est": "Established in 2021.",
+  "draftNote": "",
+  "home": {
+    "title": "विद्या विवादाय धनं मदाय शक्तिः परेषां परिपीडनाय ।\nखलस्य साधोर्विपरीतमेतज्ज्ञानाय दानाय च रक्षणाय ॥",
+    "heroImg": "/images/hero.jpg",
+    "stmt": "We invite participation in implementing continuous medical education programs, hosting free health awareness camps focused on diabetes and metabolic diseases, and providing affordable, advanced care to underserved populations.",
+    "reelTitle": "Highlights from our recent programs",
+    "reelText": "Our camps, conferences, and social initiatives support a healthier, better-educated, and more empowered society.",
+    "story": [
+      "The trust was founded in memory of our father, Sri Umakant, who passed away at a young age because of diabetes-related complications. So, we decided to work to improve the quality of life for people living with diabetes and cardiovascular and metabolic diseases.",
+      "Because there is a shortage of trained medical and paramedical professionals to address the metabolic epidemic, we decided to train, update, and educate the medical and paramedical fraternity, as well as patients, by holding free medical awareness camps and continuous medical education programs. We have also worked towards a greener environment by conducting tree plantation drives."
+    ],
+    "eventsTitle": "Our Recent Activities",
+    "eventsNote": "Upcoming events will be announced here.",
+    "meaning": "Individuals with malicious intent use their education to incite conflict, their financial resources to indulge, and their authority to oppress others. In contrast, individuals of integrity employ these assets to advance knowledge, promote charity, and provide protection.",
+    "motto": "Motto Adopted by the Trust",
+    "mottoNote": "Derived from a Sanskrit Shloka:"
+  }
+}
