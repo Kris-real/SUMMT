@@ -1,30 +1,88 @@
-// Step 2: GitHub sends you back here; we swap the code for a token and hand it to the admin page.
-module.exports = async (req, res) => {
-  const { code, state } = req.query || {};
-  const cookie = (req.headers.cookie || "").split(";").map(s => s.trim()).find(s => s.startsWith("oauth_state="));
-  const saved = cookie ? cookie.split("=")[1] : "";
   const send = (status, content) => {
-    const msg = status === "success" ? "authorization:github:success:" + JSON.stringify(content)
-                                      : "authorization:github:error:" + JSON.stringify(content);
-    res.setHeader("Content-Type", "text/html");
-    res.status(200).send(`<!doctype html><meta charset="utf-8"><body><script>
-(function(){
-  var m=${JSON.stringify(msg)};
-  function r(e){window.opener.postMessage(m,e.origin);window.removeEventListener("message",r,false);window.close();}
-  window.addEventListener("message",r,false);
-  window.opener.postMessage("authorizing:github","*");
+    const msg =
+      "authorization:github:" + status + ":" + JSON.stringify(content);
+
+    const safeMessage = JSON.stringify(msg).replace(/</g, "\\u003c");
+    const safeStatus = JSON.stringify(status);
+    const safeError = JSON.stringify(
+      status === "error"
+        ? content.message || "GitHub login failed."
+        : ""
+    ).replace(/</g, "\\u003c");
+
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("Referrer-Policy", "no-referrer");
+
+    return res.status(200).send(`<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>GitHub login</title></head>
+<body>
+<p id="status">Finishing GitHub login...</p>
+<script>
+(function () {
+  var message = ${safeMessage};
+  var status = ${safeStatus};
+  var error = ${safeError};
+  var label = document.getElementById("status");
+  var opener = window.opener;
+
+  // This assumes the CMS and callback use the same domain.
+  var cmsOrigin = window.location.origin;
+
+  if (!opener || opener.closed) {
+    label.textContent =
+      "Cannot communicate with the admin tab. Close this popup and " +
+      "start Login with GitHub again from your admin page. " +
+      "If this repeats, check Cross-Origin-Opener-Policy headers.";
+    return;
+  }
+
+  var finished = false;
+  var timer;
+  var timeout;
+
+  function receive(event) {
+    if (event.source !== opener || event.origin !== cmsOrigin) return;
+    if (finished) return;
+    finished = true;
+
+    clearInterval(timer);
+    clearTimeout(timeout);
+    window.removeEventListener("message", receive);
+
+    opener.postMessage(message, cmsOrigin);
+    label.textContent =
+      status === "success"
+        ? "Login sent to the admin tab. You can close this popup."
+        : "Login failed: " + error;
+
+    if (status === "success") {
+      setTimeout(function () { window.close(); }, 500);
+    }
+  }
+
+  function announce() {
+    opener.postMessage("authorizing:github", cmsOrigin);
+  }
+
+  window.addEventListener("message", receive);
+
+  timer = setInterval(announce, 1000);
+  timeout = setTimeout(function () {
+    clearInterval(timer);
+    window.removeEventListener("message", receive);
+    label.textContent =
+      status === "error"
+        ? "Login failed: " + error
+        : "GitHub returned a token, but the admin tab did not reply. " +
+          "Check that the admin page and callback use exactly the same " +
+          "domain, then check the browser console for script or header errors.";
+  }, 15000);
+
+  announce();
 })();
-</script>Signing in...</body>`);
+</script>
+</body>
+</html>`);
   };
-  if (!code || !state || state !== saved) return send("error", { message: "Login check failed. Close this window and try again." });
-  try {
-    const r = await fetch("https://github.com/login/oauth/access_token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ client_id: process.env.GITHUB_CLIENT_ID, client_secret: process.env.GITHUB_CLIENT_SECRET, code })
-    });
-    const d = await r.json();
-    if (d.error || !d.access_token) return send("error", { message: d.error_description || d.error || "No token returned." });
-    send("success", { token: d.access_token, provider: "github" });
-  } catch (e) { send("error", { message: "Could not reach GitHub." }); }
-};
