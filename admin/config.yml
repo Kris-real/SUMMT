@@ -5,7 +5,7 @@ backend:
   repo: Kris-real/summt-website
   branch: main
   # VERCEL LOGIN: put your live address here (no slash at the end), for example https://summet.vercel.app
-  base_url: https://summt.in
+  base_url: https://www.summt.in
   auth_endpoint: api/auth
 
 publish_mode: simple
