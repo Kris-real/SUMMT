@@ -1,83 +1,78 @@
+module.exports = async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("Referrer-Policy", "no-referrer");
+
   const send = (status, content) => {
-    const msg =
+    const message =
       "authorization:github:" + status + ":" + JSON.stringify(content);
 
-    const safeMessage = JSON.stringify(msg).replace(/</g, "\\u003c");
-    const safeStatus = JSON.stringify(status);
-    const safeError = JSON.stringify(
-      status === "error"
-        ? content.message || "GitHub login failed."
-        : ""
-    ).replace(/</g, "\\u003c");
+    const safeJSON = (value) =>
+      JSON.stringify(value).replace(/</g, "\\u003c");
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "no-store");
-    res.setHeader("Referrer-Policy", "no-referrer");
 
     return res.status(200).send(`<!doctype html>
 <html>
-<head><meta charset="utf-8"><title>GitHub login</title></head>
+<head>
+  <meta charset="utf-8">
+  <title>GitHub login</title>
+</head>
 <body>
 <p id="status">Finishing GitHub login...</p>
 <script>
 (function () {
-  var message = ${safeMessage};
-  var status = ${safeStatus};
-  var error = ${safeError};
+  var message = ${safeJSON(message)};
+  var errorMessage = ${safeJSON(
+    status === "error" ? content.message || "Login failed." : ""
+  )};
   var label = document.getElementById("status");
-  var opener = window.opener;
+  var parent = window.opener;
+  var origin = window.location.origin;
 
-  // This assumes the CMS and callback use the same domain.
-  var cmsOrigin = window.location.origin;
-
-  if (!opener || opener.closed) {
+  if (!parent || parent.closed) {
     label.textContent =
-      "Cannot communicate with the admin tab. Close this popup and " +
-      "start Login with GitHub again from your admin page. " +
-      "If this repeats, check Cross-Origin-Opener-Policy headers.";
+      "Cannot reach the admin tab. Close this popup and start login " +
+      "again from the admin page.";
     return;
   }
 
   var finished = false;
-  var timer;
+  var interval;
   var timeout;
 
   function receive(event) {
-    if (event.source !== opener || event.origin !== cmsOrigin) return;
+    if (event.source !== parent || event.origin !== origin) return;
     if (finished) return;
     finished = true;
 
-    clearInterval(timer);
+    clearInterval(interval);
     clearTimeout(timeout);
     window.removeEventListener("message", receive);
 
-    opener.postMessage(message, cmsOrigin);
-    label.textContent =
-      status === "success"
-        ? "Login sent to the admin tab. You can close this popup."
-        : "Login failed: " + error;
+    parent.postMessage(message, origin);
 
-    if (status === "success") {
+    if (errorMessage) {
+      label.textContent = "Login failed: " + errorMessage;
+    } else {
+      label.textContent = "Login sent to admin. You can close this window.";
       setTimeout(function () { window.close(); }, 500);
     }
   }
 
   function announce() {
-    opener.postMessage("authorizing:github", cmsOrigin);
+    parent.postMessage("authorizing:github", origin);
   }
 
   window.addEventListener("message", receive);
 
-  timer = setInterval(announce, 1000);
+  interval = setInterval(announce, 1000);
   timeout = setTimeout(function () {
-    clearInterval(timer);
+    clearInterval(interval);
     window.removeEventListener("message", receive);
-    label.textContent =
-      status === "error"
-        ? "Login failed: " + error
-        : "GitHub returned a token, but the admin tab did not reply. " +
-          "Check that the admin page and callback use exactly the same " +
-          "domain, then check the browser console for script or header errors.";
+    label.textContent = errorMessage
+      ? "Login failed: " + errorMessage
+      : "The admin tab did not reply. Check that the admin page and " +
+        "callback use the exact same domain, including www.";
   }, 15000);
 
   announce();
@@ -86,3 +81,81 @@
 </body>
 </html>`);
   };
+
+  try {
+    const { code, state, error } = req.query || {};
+
+    if (error) {
+      return send("error", { message: "GitHub authorization was declined." });
+    }
+
+    const cookie = (req.headers.cookie || "")
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith("oauth_state="));
+
+    const saved = cookie
+      ? decodeURIComponent(cookie.slice("oauth_state=".length))
+      : "";
+
+    if (
+      typeof code !== "string" ||
+      typeof state !== "string" ||
+      !saved ||
+      state !== saved
+    ) {
+      return send("error", {
+        message: "Login check failed. Close this popup and try again."
+      });
+    }
+
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      return send("error", {
+        message: "GitHub environment variables are missing in Vercel."
+      });
+    }
+
+    const response = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          code
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || data.error || !data.access_token) {
+      return send("error", {
+        message:
+          data.error_description ||
+          data.error ||
+          "GitHub did not return an access token."
+      });
+    }
+
+    return send("success", {
+      token: data.access_token,
+      provider: "github"
+    });
+  } catch (error) {
+    console.error("OAuth callback failed:", error.name);
+
+    return send("error", {
+      message: "The callback failed. Check the Vercel runtime logs."
+    });
+  }
+};
+
+
