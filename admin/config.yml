@@ -2,10 +2,10 @@
 # STEP: replace YOUR-GITHUB-USERNAME/YOUR-REPO-NAME below (see the setup guide).
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/YOUR-REPO-NAME
+  repo: Kris-real/summt-website
   branch: main
   # VERCEL LOGIN: put your live address here (no slash at the end), for example https://summet.vercel.app
-  base_url: https://YOUR-SITE.vercel.app
+  base_url: base_url: https://summt.in
   auth_endpoint: api/auth
 
 publish_mode: simple
