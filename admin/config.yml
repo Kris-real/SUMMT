@@ -1,4 +1,4 @@
-# Admin panel settings for the SUMMET website (Decap CMS).
+# Admin panel settings for the SUMMT website (Decap CMS).
 # STEP: replace YOUR-GITHUB-USERNAME/YOUR-REPO-NAME below (see the setup guide).
 backend:
   name: github
