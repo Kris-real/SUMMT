@@ -2,7 +2,7 @@
 # STEP: replace YOUR-GITHUB-USERNAME/YOUR-REPO-NAME below (see the setup guide).
 backend:
   name: github
-  repo: Kris-real/summt-website
+  repo: Kris-real/SUMMT
   branch: main
   # VERCEL LOGIN: put your live address here (no slash at the end), for example https://summet.vercel.app
   base_url: https://www.summt.in
